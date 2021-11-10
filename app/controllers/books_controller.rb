@@ -7,9 +7,18 @@ class BooksController < ApplicationController
   end
 
   def index
+    if params[:new]
+      @books = Book.latest
+    elsif params[:rate]
+      @books = Book.rate
+    elsif params[:category]
+      category = params[:category]
+      @books = Book.where(category: category)
+    else
     @books = Book.all
-    @book = Book.new
+    end
 
+    @book = Book.new
   end
 
   def create
@@ -52,7 +61,7 @@ class BooksController < ApplicationController
   private
 
   def book_params
-    params.require(:book).permit(:title, :body, :rate)
+    params.require(:book).permit(:title, :body, :rate, :category)
   end
 
 end
